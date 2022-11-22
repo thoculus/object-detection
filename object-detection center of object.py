@@ -44,6 +44,7 @@ for cnt in contours :
             num += 1
         i = i + 1
 
+#coordinates of the center of the object with respect to our image
 coorX = shapeX/num
 coorY = shapeY/num
 
