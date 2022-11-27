@@ -1,0 +1,35 @@
+import cvzone
+from cvzone.ColorModule import ColorFinder
+import cv2
+
+cap = cv2.VideoCapture(0)
+cap.set(3,1280) # Setting width
+cap.set(4,720) # Setting height
+
+success,img = cap.read()
+h,w,_ = img.shape
+
+myColorFounder = ColorFinder(True) # Finding color.
+hsvVals = {'hmin':10,'smin':55,'vmin':215,'hmax':42,'smax':255,'vamx':255} # Default Values.
+
+while True:
+    success,img = cap.read()
+    imgColor,mask = myColorFounder.update(img,hsvVals)
+    
+    imgContour,contours= cvzone.findContours(img,mask) # It'll find the contours automatically.
+    
+    if contours:
+        data=contours[0]['center'][0],\
+             h-contours[0]['center'][1],\
+             int(contours[0]['area'])# It's finding the x and y value of the object.
+        print(data) # It'll print the x and y value of the object.
+    
+    
+    imgStack = cvzone.stackImages([img,imgColor,mask,imgContour],2,0.5) # Stacking Frames.
+    cv2.imshow("Image",imgStack)
+    
+    key = cv2.waitKey(1)
+    if key == ord('q'):break
+
+cap.release()
+cv2.destroyAllWindows()    
