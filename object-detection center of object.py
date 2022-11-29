@@ -48,12 +48,12 @@ for cnt in contours :
 coorX = shapeX/num
 coorY = shapeY/num
 
-print(shapeX, shapeY)
+print(int(shapeX), int(shapeY))
 print(num)
-print(coorX,coorY)
+print(int(coorX),int(coorY))
 
 # String containing the co-ordinates.
-string = str(coorX) + " " + str(coorY) 
+string = str(int(coorX)) + " " + str(int(coorY)) 
   
 # text on remaining co-ordinates.
 cv2.putText(img2, string, (int(coorX), int(coorY)), font, 0.5, (0, 255, 0))
