@@ -1,0 +1,38 @@
+import cv2 as cv2
+import numpy as np
+videoCapture = cv2.VideoCapture(0)
+prevCircle = None # Precvious circle that is in the frame
+dist = lambda x1,y1,x2,y2:(x1-x2)**2+(y1-y2)**2 # It calculates the distance between two points.
+while True:
+    
+    ret,frame = videoCapture.read() # ret = return a value|frame = actuaş frame itself.
+    if not ret: break # if it doesn't return a value so it'll break.
+    
+    # Converting color of the frame and adding bluring
+    grayFrame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+    blurFrame = cv2.GaussianBlur(grayFrame,(17,17),0) # values in the paranthesis is bluring degree.
+   
+    
+    # Creating Circles
+    circles = cv2.HoughCircles(blurFrame,cv2.HOUGH_GRADIENT,1.2,100,param1=100,
+                                param2=30,minRadius=75,maxRadius=400) 
+    # (,,dp,minDistance=min distance between two possible circles that are found
+    # param1=sensitivity of circle detection,param2=accuracy of circle detection)
+    
+    if circles is not None:
+        circles = np.uint16(np.around(circles)) # it returns erro message
+        chosen = None
+        for i in circles[0, :]:
+            if chosen is None: chosen = 1
+            if prevCircle is not None:
+                if dist(chosen[0],chosen[1],prevCircle[0],prevCircle[1])<=dist(i[0],i[1],prevCircle[0],prevCircle[1]): # 0:x coordinate of choosen, 1:y coordinate of choosen
+                    chosen = i
+        cv2.circle(frame,(chosen[0],chosen[1]), 1,(0,100,100), 3) # Creating the circles.
+        cv2.circle(frame,(chosen[0],chosen[1]),chosen[2],int(255,0,255),3)            
+        prevCircle = chosen
+    cv2.imshow('circles',frame)
+
+    if cv2.waitKey(1) & 0xFF== ord('q'):break # if we push q it'll close.
+
+videoCapture.release()
+cv2.destroyAllWindows()    
