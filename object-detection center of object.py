@@ -1,25 +1,22 @@
-#Kütüphaneleri import etme.
+#İmporting libraries
 import cv2
-import numpy as np
 
 shapeX = 0
 shapeY = 0
 num = 0
 
-# import matplotlib.pyplot as plt
-#Fotoğrafı import edip ekrana gösterme.
+#Importing photo and showing to user.
 font = cv2.FONT_HERSHEY_COMPLEX
 img2 = cv2.imread('ball2.jpeg', cv2.IMREAD_COLOR)
 img = cv2.imread('ball2.jpeg', cv2.IMREAD_GRAYSCALE)
-_, threshold = cv2.threshold(img, 110, 255, cv2.THRESH_BINARY)
+_, threshold = cv2.threshold(img, 110, 255, cv2.THRESH_BINARY_INV)
 
 cv2.imshow('Image',img)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 
-#Fotoğrafın pixel değerlerini gösterip fotoğrafı resize etme.
-print(img.shape) # Pixel değerini ekrana yazdırma.
+print(img.shape) # Printing pixel size of photo.
 contours, _= cv2.findContours(threshold,cv2.RETR_TREE,cv2.CHAIN_APPROX_NONE)
 print(contours[2])
 
@@ -44,16 +41,15 @@ for cnt in contours :
             num += 1
         i = i + 1
 
-#coordinates of the center of the object with respect to our image
 coorX = shapeX/num
 coorY = shapeY/num
 
-print(int(shapeX), int(shapeY))
+print(shapeX, shapeY)
 print(num)
 print(int(coorX),int(coorY))
 
 # String containing the co-ordinates.
-string = str(int(coorX)) + " " + str(int(coorY)) 
+string = " " + str(int(coorX)) + "," + str(int(coorY)) 
   
 # text on remaining co-ordinates.
 cv2.putText(img2, string, (int(coorX), int(coorY)), font, 0.5, (0, 255, 0))
