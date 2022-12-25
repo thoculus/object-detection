@@ -1,4 +1,4 @@
-#İmporting libraries
+#Importing libraries
 import cv2
 
 shapeX = 0
